@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using DataGrid;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,9 @@ namespace TestWpfSampleAppTest
         private App app;
         private MainWindow mainWindow;
         private View view;
-        private ButtonAutomationPeer buttonPeer;
         private TextBoxAutomationPeer textBoxPeer;
+        private ButtonAutomationPeer buttonPeer;
+        private DataGridAutomationPeer dataGridPeer;
 
         [SetUp]
         public void SetUp()
@@ -55,8 +57,9 @@ namespace TestWpfSampleAppTest
             List<AutomationPeer> children = viewAutomationPeer.GetChildren();
 
             //figure out type of the children before cast
-            buttonPeer = (ButtonAutomationPeer)children[0];
             textBoxPeer = (TextBoxAutomationPeer)children[1];
+            buttonPeer = (ButtonAutomationPeer)children[2];
+            dataGridPeer = (DataGridAutomationPeer)children[3];
         }
 
         [Test]
@@ -67,6 +70,11 @@ namespace TestWpfSampleAppTest
             RoutedEventArgs args = new RoutedEventArgs(Button.ClickEvent, button);
             button.RaiseEvent(args);
             Assert.That("1", Is.EqualTo(((IValueProvider)textBoxPeer).Value));
+
+            //DataGrid
+            System.Windows.Controls.DataGrid dataGrid = (System.Windows.Controls.DataGrid)dataGridPeer.Owner;
+            List<Employee> employees = dataGrid.ItemsSource.Cast<Employee>().ToList();
+            Assert.That(employees, Has.None.Null, "Some objects are null");
         }
 
         [TearDown]

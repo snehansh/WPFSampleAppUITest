@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataGrid;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,8 @@ namespace WPFSampleAppTest
         {
             InitializeComponent();
             DataContext = holder;
+            //valueTextBox.DataContext = holder;
+            dataGrid.DataContext = Employee.GetEmployees();
         }
 
         private void IncrementClicked(object sender, RoutedEventArgs e)
